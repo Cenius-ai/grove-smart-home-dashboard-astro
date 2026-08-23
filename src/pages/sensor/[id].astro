@@ -1,0 +1,149 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { mockSensors, getSensorById } from '../../lib/mock-sensors';
+import SensorChart from '../../components/SensorChart.tsx';
+
+export function getStaticPaths() {
+  return mockSensors.map((s) => ({ params: { id: s.id } }));
+}
+
+const { id } = Astro.params;
+const sensor = getSensorById(id!);
+
+if (!sensor) {
+  return Astro.redirect('/404');
+}
+
+const typeLabels: Record<string, string> = {
+  temperature: 'Temperature',
+  humidity: 'Humidity',
+  pressure: 'Pressure',
+  airquality: 'Air Quality',
+};
+
+const typeColors: Record<string, string> = {
+  temperature: '#e67e4a',
+  humidity: '#4d77cc',
+  pressure: '#7c5cbf',
+  airquality: '#43a87c',
+};
+
+const accentColor = typeColors[sensor.type] ?? '#4d77cc';
+const statusLabel = sensor.status === 'online' ? 'Online' : sensor.status === 'warning' ? 'Warning' : 'Offline';
+---
+
+<Layout title={`${sensor.name} — Sensor Detail`} description={`${sensor.name} ${typeLabels[sensor.type] ?? sensor.type} — ${sensor.currentValue.toFixed(1)} ${sensor.unit}`}>
+  <div class="mx-auto max-w-4xl px-4 py-6 sm:px-6 sm:py-10">
+    <!-- Back link -->
+    <a
+      href="/"
+      class="mb-6 inline-flex items-center gap-1.5 rounded-btn px-2 py-1 text-sm font-medium text-[var(--color-muted)] hover:text-[var(--color-fg)] hover:bg-[var(--color-border)] transition-colors duration-160"
+    >
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+           stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <polyline points="15 18 9 12 15 6" />
+      </svg>
+      Back to Dashboard
+    </a>
+
+    <!-- Sensor header -->
+    <section class="surface-card mb-6 p-5 sm:p-6">
+      <div class="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+        <div class="flex items-start gap-4">
+          <span
+            class="flex h-12 w-12 items-center justify-center rounded-btn shrink-0"
+            style={`background: ${accentColor}18; color: ${accentColor}`}
+            aria-hidden="true"
+          >
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              {sensor.icon === 'thermometer' && <path d="M14 14.76V3.5a2.5 2.5 0 0 0-5 0v11.26a4.5 4.5 0 1 0 5 0z" />}
+              {sensor.icon === 'droplets' && <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z" />}
+              {sensor.icon === 'gauge' && <path d="M12 2v2m0 16v2M4.93 4.93l1.41 1.41m11.32 11.32 1.41 1.41M2 12h2m16 0h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41M14 12a2 2 0 1 1-4 0 2 2 0 0 1 4 0z" />}
+              {sensor.icon === 'wind' && <path d="M9.59 4.59A2 2 0 1 1 11 8H2m10.59 11.41A2 2 0 1 0 14 16H2m15.73-8.27A2.5 2.5 0 1 1 19.5 12H2" />}
+            </svg>
+          </span>
+          <div>
+            <h1 class="text-xl font-semibold tracking-tight sm:text-2xl">{sensor.name}</h1>
+            <p class="text-sm text-[var(--color-muted)] mt-0.5">
+              {sensor.location} &middot; {typeLabels[sensor.type] ?? sensor.type}
+            </p>
+          </div>
+        </div>
+
+        <!-- Status badge -->
+        <span
+          class={`inline-flex items-center gap-1.5 rounded-pill px-3 py-1.5 text-xs font-medium shrink-0 ${
+            sensor.status === 'online' ? 'bg-[var(--color-ok)]/10 text-[var(--color-ok)]' :
+            sensor.status === 'warning' ? 'bg-[var(--color-warn)]/10 text-[var(--color-warn)]' :
+            'bg-[var(--color-muted)]/10 text-[var(--color-muted)]'
+          }`}
+        >
+          <span class={`status-dot ${sensor.status}`}></span>
+          {statusLabel}
+        </span>
+      </div>
+
+      <!-- Metric grid -->
+      <div class="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-4">
+        <div class="rounded-card bg-[var(--color-bg)] p-3 text-center">
+          <p class="text-xs text-[var(--color-muted)] uppercase tracking-wider">Current</p>
+          <p class="metric-value mt-1 text-2xl font-semibold">{sensor.currentValue.toFixed(1)} <span class="text-sm font-normal text-[var(--color-muted)]">{sensor.unit}</span></p>
+        </div>
+        <div class="rounded-card bg-[var(--color-bg)] p-3 text-center">
+          <p class="text-xs text-[var(--color-muted)] uppercase tracking-wider">Average</p>
+          <p class="metric-value mt-1 text-2xl font-semibold">{sensor.avg.toFixed(1)} <span class="text-sm font-normal text-[var(--color-muted)]">{sensor.unit}</span></p>
+        </div>
+        <div class="rounded-card bg-[var(--color-bg)] p-3 text-center">
+          <p class="text-xs text-[var(--color-muted)] uppercase tracking-wider">Min</p>
+          <p class="metric-value mt-1 text-2xl font-semibold">{sensor.min.toFixed(1)} <span class="text-sm font-normal text-[var(--color-muted)]">{sensor.unit}</span></p>
+        </div>
+        <div class="rounded-card bg-[var(--color-bg)] p-3 text-center">
+          <p class="text-xs text-[var(--color-muted)] uppercase tracking-wider">Max</p>
+          <p class="metric-value mt-1 text-2xl font-semibold">{sensor.max.toFixed(1)} <span class="text-sm font-normal text-[var(--color-muted)]">{sensor.unit}</span></p>
+        </div>
+      </div>
+    </section>
+
+    <!-- History chart -->
+    <section class="mb-6">
+      <h2 class="mb-3 text-lg font-semibold tracking-tight">48-Hour History</h2>
+      <SensorChart
+        sensorId={sensor.id}
+        sensorName={sensor.name}
+        unit={sensor.unit}
+        type={sensor.type}
+        client:load
+      />
+    </section>
+
+    <!-- History table preview -->
+    <section class="surface-card overflow-hidden">
+      <h2 class="px-5 pt-5 text-lg font-semibold tracking-tight">Recent Readings</h2>
+      <div class="mt-3 overflow-x-auto">
+        <table class="w-full text-sm">
+          <thead>
+            <tr class="border-b border-[var(--color-border)] text-left text-xs uppercase tracking-wider text-[var(--color-muted)]">
+              <th class="px-5 py-2.5 font-medium">Time</th>
+              <th class="px-5 py-2.5 font-medium text-right">Value</th>
+            </tr>
+          </thead>
+          <tbody>
+            {sensor.history.slice(-12).reverse().map((point) => (
+              <tr class="border-b border-[var(--color-border)] hover:bg-[var(--color-bg)] transition-colors duration-160">
+                <td class="px-5 py-2.5 tabular-nums">
+                  {new Date(point.timestamp).toLocaleDateString([], { month: 'short', day: 'numeric' })}
+                  {' '}
+                  {new Date(point.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                </td>
+                <td class="px-5 py-2.5 text-right metric-value font-medium tabular-nums">
+                  {point.value.toFixed(1)} {sensor.unit}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </div>
+</Layout>

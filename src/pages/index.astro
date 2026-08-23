@@ -1,0 +1,72 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { getSensorSummaries } from '../lib/mock-sensors';
+import LiveSensorCard from '../components/LiveSensorCard.tsx';
+
+const summaries = getSensorSummaries();
+
+const typeLabels: Record<string, string> = {
+  temperature: 'Temperature',
+  humidity: 'Humidity',
+  pressure: 'Pressure',
+  airquality: 'Air Quality',
+};
+
+// Group sensors by type for stats
+const byType = new Map<string, typeof summaries>();
+for (const s of summaries) {
+  const arr = byType.get(s.type) ?? [];
+  arr.push(s);
+  byType.set(s.type, arr);
+}
+
+const onlineCount = summaries.filter((s) => s.status === 'online').length;
+const warningCount = summaries.filter((s) => s.status === 'warning').length;
+---
+
+<Layout title="Dashboard" description="Grove smart-home dashboard — live sensor readings at a glance.">
+  <div class="mx-auto max-w-6xl px-4 py-6 sm:px-6 sm:py-10">
+    <!-- Hero / stats row -->
+    <section class="mb-8">
+      <h1 class="text-2xl font-semibold tracking-tight sm:text-3xl">Dashboard</h1>
+      <p class="mt-1 text-sm text-[var(--color-muted)]">
+        Live sensor readings across your home
+      </p>
+
+      <!-- KPI pill row -->
+      <div class="mt-5 flex flex-wrap gap-3">
+        <span class="inline-flex items-center gap-1.5 rounded-pill px-3 py-1 text-xs font-medium bg-[var(--color-bg)] border border-[var(--color-border)]">
+          <span class="status-dot online"></span>
+          {onlineCount} online
+        </span>
+        {
+          warningCount > 0 && (
+            <span class="inline-flex items-center gap-1.5 rounded-pill px-3 py-1 text-xs font-medium bg-[var(--color-bg)] border border-[var(--color-border)]">
+              <span class="status-dot warning"></span>
+              {warningCount} warning
+            </span>
+          )
+        }
+        <span class="inline-flex items-center gap-1.5 rounded-pill px-3 py-1 text-xs font-medium bg-[var(--color-bg)] border border-[var(--color-border)]">
+          {summaries.length} sensors
+        </span>
+        {
+          [...byType.entries()].map(([type, arr]) => (
+            <span class="inline-flex items-center gap-1.5 rounded-pill px-3 py-1 text-xs font-medium bg-[var(--color-bg)] border border-[var(--color-border)]">
+              {typeLabels[type] ?? type}: {arr.length}
+            </span>
+          ))
+        }
+      </div>
+    </section>
+
+    <!-- Sensor grid -->
+    <section>
+      <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {summaries.map((sensor) => (
+          <LiveSensorCard sensor={sensor} client:load />
+        ))}
+      </div>
+    </section>
+  </div>
+</Layout>

@@ -1,0 +1,94 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { mockSensors } from '../lib/mock-sensors';
+---
+
+<Layout title="Settings" description="Configure your Grove smart-home dashboard preferences.">
+  <div class="mx-auto max-w-3xl px-4 py-6 sm:px-6 sm:py-10">
+    <h1 class="text-2xl font-semibold tracking-tight sm:text-3xl">Settings</h1>
+    <p class="mt-1 text-sm text-[var(--color-muted)]">
+      Dashboard preferences and sensor overview
+    </p>
+
+    <!-- Appearance -->
+    <section class="surface-card mt-6 p-5 sm:p-6">
+      <h2 class="text-lg font-semibold tracking-tight">Appearance</h2>
+      <p class="mt-1 text-sm text-[var(--color-muted)]">
+        Choose between light and dark mode. Your preference is saved to your browser.
+      </p>
+      <div class="mt-4 flex items-center gap-3">
+        <span class="text-sm font-medium">Theme:</span>
+        <span class="text-sm text-[var(--color-muted)]">
+          Use the <strong>sun/moon toggle</strong> in the header bar to switch themes.
+        </span>
+      </div>
+    </section>
+
+    <!-- Refresh -->
+    <section class="surface-card mt-4 p-5 sm:p-6">
+      <h2 class="text-lg font-semibold tracking-tight">Live Updates</h2>
+      <p class="mt-1 text-sm text-[var(--color-muted)]">
+        Sensor values auto-refresh every <strong>5 seconds</strong> without reloading the page. The dashboard polls each sensor&#8217;s API endpoint to simulate live jitter on the base readings.
+      </p>
+    </section>
+
+    <!-- Sensor registry -->
+    <section class="surface-card mt-4 p-5 sm:p-6">
+      <h2 class="text-lg font-semibold tracking-tight">Sensor Registry</h2>
+      <p class="mt-1 text-sm text-[var(--color-muted)]">
+        All {mockSensors.length} simulated sensors currently monitored.
+      </p>
+
+      <div class="mt-4 overflow-x-auto">
+        <table class="w-full text-sm">
+          <thead>
+            <tr class="border-b border-[var(--color-border)] text-left text-xs uppercase tracking-wider text-[var(--color-muted)]">
+              <th class="py-2.5 pr-4 font-medium">Name</th>
+              <th class="py-2.5 pr-4 font-medium">Type</th>
+              <th class="py-2.5 pr-4 font-medium">Location</th>
+              <th class="py-2.5 pr-4 font-medium text-right">Current</th>
+              <th class="py-2.5 font-medium">Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            {mockSensors.map((s) => (
+              <tr class="border-b border-[var(--color-border)] hover:bg-[var(--color-bg)] transition-colors duration-160">
+                <td class="py-2.5 pr-4">
+                  <a href={`/sensor/${s.id}`} class="font-medium text-[var(--color-accent)] hover:underline">
+                    {s.name}
+                  </a>
+                </td>
+                <td class="py-2.5 pr-4 text-[var(--color-muted)] capitalize">{s.type}</td>
+                <td class="py-2.5 pr-4 text-[var(--color-muted)]">{s.location}</td>
+                <td class="py-2.5 pr-4 text-right metric-value font-medium tabular-nums">
+                  {s.currentValue.toFixed(1)} {s.unit}
+                </td>
+                <td class="py-2.5">
+                  <span class={`inline-flex items-center gap-1.5 rounded-pill px-2 py-0.5 text-xs font-medium ${
+                    s.status === 'online' ? 'bg-[var(--color-ok)]/10 text-[var(--color-ok)]' :
+                    s.status === 'warning' ? 'bg-[var(--color-warn)]/10 text-[var(--color-warn)]' :
+                    'bg-[var(--color-muted)]/10 text-[var(--color-muted)]'
+                  }`}>
+                    <span class={`status-dot ${s.status}`}></span>
+                    {s.status === 'online' ? 'Online' : s.status === 'warning' ? 'Warning' : 'Offline'}
+                  </span>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- About -->
+    <section class="surface-card mt-4 p-5 sm:p-6">
+      <h2 class="text-lg font-semibold tracking-tight">About Grove</h2>
+      <p class="mt-1 text-sm text-[var(--color-muted)]">
+        Grove is a simulated smart-home dashboard built with Astro, React, TypeScript, and Tailwind CSS. All sensor data is mock data — no real IoT hardware is connected. The dashboard demonstrates live-updating metric cards, historical charts, theme toggling, and responsive design.
+      </p>
+      <p class="mt-2 text-sm text-[var(--color-muted)]">
+        Built for demonstration and evaluation purposes.
+      </p>
+    </section>
+  </div>
+</Layout>
