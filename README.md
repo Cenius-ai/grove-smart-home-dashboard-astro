@@ -1,6 +1,7 @@
 # Grove — Smart-Home Dashboard — production-ready Astro monitoring dashboard starter
 
-**Grove — Smart-Home Dashboard** is a free, open-source monitoring dashboard built with Astro. A read‑only smart‑home dashboard built with Astro + TypeScript that displays live‑like sensor readings for temperature, humidity, lights, energy usage, motion, and locks. Run it locally, deploy it as a self-hosted monitoring dashboard, or [remix it on cenius.ai](https://cenius.ai/marketplace/p/grove-smart-home-dashboard?ref=gh&utm_campaign=grove-smart-home-dashboard-astro) to make it your own — the whole application (code, design, seeded demo data) ships in this repository under the Apache-2.0 license.
+If you want a self-hosted monitoring dashboard without the vendor lock-in, **Grove — Smart-Home Dashboard** is ready to run. Built with Astro and Apache-2.0-licensed, Grove — Smart-Home Dashboard ships complete — one clone, one install command. A read‑only smart‑home dashboard built with Astro + TypeScript that displays live‑like sensor readings for temperature, humidity, lights, energy usage, motion, and locks. [Open Grove — Smart-Home Dashboard on cenius.ai](https://cenius.ai/marketplace/p/grove-smart-home-dashboard?ref=gh&utm_campaign=grove-smart-home-dashboard-astro) to customise it without touching a line of Grove — Smart-Home Dashboard code.
+
 
 [![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE) ![Stack](https://img.shields.io/badge/Stack-Astro-3b82f6) [![Built with cenius.ai](https://img.shields.io/badge/Built%20with-cenius.ai-8b5cf6)](https://cenius.ai)
 
@@ -16,11 +17,23 @@ _Local clone? See [Quick start](#quick-start) below. cenius.ai is the zero-setup
 
 ![Grove — Smart-Home Dashboard demo — monitoring dashboard built with Astro](.github/media/hero_flagship.gif)
 
-▶ **[Watch the full demo video](https://cenius.ai/marketplace/p/grove-smart-home-dashboard?ref=gh&utm_campaign=grove-smart-home-dashboard-astro)** — the complete walkthrough, playing on the project's cenius.ai page · [MP4 file](.github/media/demo.mp4)
+▶ **[Full demo walkthrough](https://cenius.ai/marketplace/p/grove-smart-home-dashboard?ref=gh&utm_campaign=grove-smart-home-dashboard-astro)** — watch it on the project page · [download MP4](.github/media/demo.mp4)
 
 ## Screenshots
 
 <img src=".github/media/shot-1.png" width="32%" alt="Grove — Smart-Home Dashboard monitoring dashboard screenshot 1"/> <img src=".github/media/shot-2.png" width="32%" alt="Grove — Smart-Home Dashboard monitoring dashboard screenshot 2"/> <img src=".github/media/shot-3.png" width="32%" alt="Grove — Smart-Home Dashboard monitoring dashboard screenshot 3"/>
+
+## Quick start
+
+```bash
+./install.sh   # installs dependencies + seeds demo data
+```
+
+See [`INSTALL.md`](INSTALL.md) for full setup and usage instructions.
+
+## Architecture
+
+Everything runs out of the box: a Astro codebase (34 files). `./install.sh` gets you from a fresh clone to a running instance with sample data in a single step. Top-level layout: `public/`, `src/`. Step-by-step setup guide: [`INSTALL.md`](INSTALL.md).
 
 ## Features
 
@@ -30,14 +43,6 @@ _Local clone? See [Quick start](#quick-start) below. cenius.ai is the zero-setup
 - Responsive design
 - Simulated live updates
 - Multi‑page navigation
-
-## Quick start
-
-```bash
-./install.sh   # installs dependencies + seeds demo data
-```
-
-See [`INSTALL.md`](INSTALL.md) for full setup and usage instructions.
 
 ## Usage guide
 
@@ -86,31 +91,27 @@ The **sun/moon icon** in the top-right header switches between light and dark mo
 
 _Full guide: [`USAGE.md`](USAGE.md)_
 
-## Architecture
-
-Astro application, delivered as a complete, runnable project (47 files). Top-level layout: `public/`, `src/`. `install.sh` provisions dependencies and seeds demo data, so the app boots with something to show. Setup details live in [`INSTALL.md`](INSTALL.md).
-
 ## FAQ
 
 ### What does it take to self-host Grove — Smart-Home Dashboard?
 
 Everything you need ships in this repo: clone it, run `./install.sh` to install dependencies and seed demo data, then follow [`INSTALL.md`](INSTALL.md) to start it. No external services required.
 
+### Is Grove — Smart-Home Dashboard free for commercial use?
+
+The code is under the Apache-2.0 license, which allows commercial use without restriction. You can build, sell, and deploy it freely. Full text: [LICENSE](LICENSE).
+
+### What technologies are in Grove — Smart-Home Dashboard's stack?
+
+Astro end-to-end. Every file you need to run the app is here in this repository — code, configuration, seed data. Highlights include sensor detail page with historical chart.
+
 ### Is there a no-code way to modify Grove — Smart-Home Dashboard?
 
 Describe what you want changed on [cenius.ai](https://cenius.ai/marketplace/p/grove-smart-home-dashboard?ref=gh&utm_campaign=grove-smart-home-dashboard-astro) — no code editing needed; the platform produces a fresh build you can download and deploy.
 
-### Which technology stack does Grove — Smart-Home Dashboard use?
-
-Astro. The full source in this repository is exactly what the app runs. Highlights include sensor detail page with historical chart.
-
-### Is Grove — Smart-Home Dashboard free for commercial use?
-
-It is. Apache-2.0 licensing means you can build a product on it, sell it, or use it inside a company with no fees. Details: [LICENSE](LICENSE).
-
 ### Is white-labeling Grove — Smart-Home Dashboard allowed?
 
-Yes — and the easiest way is [remixing it on cenius.ai](https://cenius.ai/marketplace/p/grove-smart-home-dashboard?ref=gh&utm_campaign=grove-smart-home-dashboard-astro): modifications made on the platform come with full rebrand and relicense rights over your derivative.
+White-labeling is supported: fork the MIT-licensed source and rebrand it yourself, or use [cenius.ai](https://cenius.ai/marketplace/p/grove-smart-home-dashboard?ref=gh&utm_campaign=grove-smart-home-dashboard-astro) to make changes in a guided workspace — platform modifications come with full rebrand rights.
 
 ## License & rebranding
 
